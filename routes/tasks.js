@@ -20,4 +20,32 @@ router.get('/task/:id',function(req, res, next){
         res.json(task);
     });
 });
+
+//Save tasks
+router.post('/task',function(req,res,next){
+    var task = req.body;
+    if(!task.title || (task.isDone + "")){
+        res.status(400);
+        res.json({
+            "error" : "Bad data"
+        });
+    }
+    else{
+        db.task.save(task,function(error,task){
+          if(err){
+            res.send(err);
+          }
+          res.json(tasks);  
+        });
+    }
+});
+//Delete task
+router.delete('/task/:id',function(req, res, next){
+    db.tasks.remove({_id: mongojs.ObjectId(req.params.id)},function(err,task){
+        if(err){
+            res.send(err);
+        }
+        res.json(task);
+    });
+});
 module.exports = router;
